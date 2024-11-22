@@ -111,23 +111,24 @@ let score = 0;
 let timeLeft = 300;
 let timerInterval;
 
-// Função para embaralhar o array de perguntas (Fisher-Yates)
+// Função para embaralhar as perguntas
 function shuffleQuestions() {
     for (let i = quizQuestions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [quizQuestions[i], quizQuestions[j]] = [quizQuestions[j], quizQuestions[i]]; // Troca as perguntas
+        [quizQuestions[i], quizQuestions[j]] = [quizQuestions[j], quizQuestions[i]]; 
     }
 }
 
-// Função para embaralhar as opções de resposta (Fisher-Yates)
+// Função para embaralhar respostas.
 function shuffleAnswers() {
     quizQuestions.forEach(question => {
-        const correctAnswer = question.correctAnswer; // Armazena o índice da resposta correta
+        const correctAnswer = question.correctAnswer; 
         for (let i = question.options.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [question.options[i], question.options[j]] = [question.options[j], question.options[i]]; // Troca as opções
+            [question.options[i], question.options[j]] = [question.options[j], question.options[i]];
 
             // Se a resposta correta estava na posição trocada, ajusta o índice
+            
             if (question.correctAnswer === i) {
                 question.correctAnswer = j;
             } else if (question.correctAnswer === j) {
@@ -138,18 +139,23 @@ function shuffleAnswers() {
 }
 
 // Função para iniciar o quiz
+
 function IniciarQuiz() {
+    
     // Embaralha as perguntas e as respostas
+    
     shuffleQuestions();
     shuffleAnswers();
 
     // Esconde o botão de iniciar e o contador
+    
     document.getElementById('botao').style.display = 'none';
     document.getElementById('contador').style.display = 'block';
     document.getElementById('question-container').classList.remove('hidden');
     loadQuestion();
 
     // Inicia o contador
+    
     startTimer();
 }
 
@@ -158,7 +164,7 @@ function loadQuestion() {
     document.getElementById('question-text').textContent = question.question;
 
     const answersContainer = document.getElementById('answers-container');
-    answersContainer.innerHTML = ''; // Limpa as opções anteriores
+    answersContainer.innerHTML = ''; 
 
     question.options.forEach((option, index) => {
         const button = document.createElement('button');
