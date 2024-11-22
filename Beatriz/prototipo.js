@@ -106,7 +106,6 @@ const quizQuestions = [
     }
 ];
 
-
 let currentQuestionIndex = 0;
 let score = 0;
 let timeLeft = 300;
@@ -123,19 +122,24 @@ function shuffleQuestions() {
 // Função para embaralhar as opções de resposta (Fisher-Yates)
 function shuffleAnswers() {
     quizQuestions.forEach(question => {
+        const correctAnswer = question.correctAnswer; // Armazena o índice da resposta correta
         for (let i = question.options.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [question.options[i], question.options[j]] = [question.options[j], question.options[i]]; // Troca as opções
+
+            // Se a resposta correta estava na posição trocada, ajusta o índice
+            if (question.correctAnswer === i) {
+                question.correctAnswer = j;
+            } else if (question.correctAnswer === j) {
+                question.correctAnswer = i;
+            }
         }
     });
 }
 
-// chama função de embaralhamento de perguntas
-
+// Função para iniciar o quiz
 function IniciarQuiz() {
     // Embaralha as perguntas e as respostas
-
-
     shuffleQuestions();
     shuffleAnswers();
 
@@ -146,7 +150,6 @@ function IniciarQuiz() {
     loadQuestion();
 
     // Inicia o contador
-
     startTimer();
 }
 
@@ -155,7 +158,7 @@ function loadQuestion() {
     document.getElementById('question-text').textContent = question.question;
 
     const answersContainer = document.getElementById('answers-container');
-    answersContainer.innerHTML = ''; 
+    answersContainer.innerHTML = ''; // Limpa as opções anteriores
 
     question.options.forEach((option, index) => {
         const button = document.createElement('button');
@@ -193,44 +196,23 @@ function startTimer() {
 }
 
 function showResults() {
-    // Esconde o contador de tempo assim que o jogo acaba
-
     document.getElementById('contador').style.display = 'none';
-
-    // Esconde a área das perguntas
-
     document.getElementById('question-container').classList.add('hidden');
-
-    // Exibe o resultado do quiz
-
     const resultContainer = document.getElementById('result');
     resultContainer.classList.remove('hidden');
     document.getElementById('score').textContent = `Você acertou ${score} de ${quizQuestions.length} perguntas.`;
-
-    // Exibe o botão de reiniciar
-
     document.getElementById('reiniciar').style.display = 'inline-block';
 }
 
 function reiniciarQuiz() {
-
-    // Reinicia o estado do quiz
-
     currentQuestionIndex = 0;
     score = 0;
     timeLeft = 300;
 
-    // Esconde o botão de reiniciar e esconde a seção de resultados
-
     document.getElementById('reiniciar').style.display = 'none';
     document.getElementById('result').classList.add('hidden');
-    
-    // Mostra o contador de tempo e o botão de iniciar novamente
-
     document.getElementById('contador').style.display = 'block'; 
     document.getElementById('botao').style.display = 'inline-block'; 
-
-    // Reinicia o contador de tempo
 
     clearInterval(timerInterval);
     document.getElementById('timer').textContent = `${timeLeft}s`;  
